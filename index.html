@@ -4,50 +4,111 @@
     <style>
       body {
         overflow: hidden;
+        padding: 5;
       }
     </style>
   </head>
   <body>
-    <h1 id="xvalue"></h1>
-    <h1 id="yvalue"></h1>
     <script>
       var w = window.innerWidth;
       var h = window.innerHeight;
-      var ball = new ball();//creating a new object globally
-      document.getElementById('xvalue').innerHTML = ball.x;
-      document.getElementById('yvalue').innerHTML = ball.y;
+      var p1 = new p1();//creating a new object globally
+      var p2 = new p2();
+      var ball = new ball();
+      var bg;
+      var d;
+      var motion1 = 0;
+      var motion2 = 0;
       function setup() {
         createCanvas(w,h);
+        bg = loadImage("https://i.ebayimg.com/images/g/Wp0AAOSw2s1UsqsH/s-l640.jpg    ");
       }
       function draw() {
-        background( 255 );
-        ball.show();
-        ball.move();
+        clear();
+        background(bg);
+        p1.show();
+        p1.move();
+        p1.hit()
+        p2.rep();
+        p2.control();
+        ball.appear();
+        //ball.hit();
+        //p2.kill();
       }
-      
       function ball() {
+        this.x = 675;
+        this.y = 300;
+        this.appear = function() {
+          strokeWeight(1);
+          fill(color('white'))
+          ellipse(this.x, this.y, 50, 50);
+          this.x = this.x + (-motion1, motion1);
+          this.y = this.y + motion2;
+          
+        }
+      }
+      function p1() {
         //"this" refers to the ball
-        this.x = 100;
-        this.y = 100;
+       this.x = 100;
+         this.y = 280;
         // to show the ball
         this.show = function() {
-          fill(color('red'));
-          ellipse(this.x,this.y, 50, 50);
+          fill(color('blue'));
+          rect(this.x,this.y, 50, 50);
         }
         this.move = function() {
-          if(keyIsDown(39)) { //Right Arrow
+          if((keyIsDown(68)) &&   (this.x < w -50)) { //d
             this.x += 10;
           }
-          if (keyIsDown(37)) {//left arrow
+          if ((keyIsDown(65)) && (this.x > 50)) {//a
             this.x -= 10;
           }
-          if (keyIsDown(38)) {// up arrow
+          if ((keyIsDown(87)) && (this.y > 50)) {// w
             this.y -= 10;
           }
-          if (keyIsDown(40)) {// down arrow
+          if ((keyIsDown(83)) && (this.y < h -50)) {// s
             this.y += 10;
           }
         }
+        this.hit = function() {
+          d = dist(this.x,this.y,ball.x,ball.y);
+          if(d < 50) {
+            motion1++;
+            motion2++;
+          }
+        }
+      }
+         function p2() {
+           this.x = 1200;
+        this.y = 280;
+          this.rep = function() {
+           fill(color('red'));
+          rect(this.x,this.y, 50, 50);
+          }
+          this.control = function() {
+          if((keyIsDown(76)) && (this.x < w -50)) { //l
+            this.x += 10;
+          }
+          if ((keyIsDown(74)) && (this.x > 50)) {//j
+            this.x -= 10;
+          }
+          if ((keyIsDown(73)) && (this.y > 50)) {//i
+            this.y -= 10;
+          }
+          if ((keyIsDown(75)) && (this.y < h -50)) {//k
+            this.y += 10;
+          }
+        }
+        //this.kill = function() {
+          //d = dist(this.x,this.y,p1.x,p1.y);
+          //if(d < 50) {
+            //noLoop();
+          //this.x = this.x + (0, 0);
+          //this.y = this.y - 0;
+          //ball.x+= 1;
+          //ball.y+= 1;
+          //}
+       // }
       }
       </script>
   </body>
